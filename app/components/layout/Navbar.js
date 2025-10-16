@@ -8,7 +8,7 @@ const Navbar = () => {
         </div>
         <div className="nav-right text-white flex gap-x-6">
             <div className="nav-sigin flex justify-center  gap-2  items-center">
-                <Image src="/user-round.svg" height={22} width={22} alt="user" />
+                <Image src="/user.svg" height={22} width={22} alt="user" />
                 <p className="font-light">Sign In</p>
             </div>
             <div className="nav-fav flex justify-center  gap-2 items-center">
