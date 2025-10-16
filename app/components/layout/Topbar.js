@@ -10,7 +10,7 @@ const Topbar = () => {
       </div>
       <div className="flex justify-center items-center gap-11">
         <div className="flex justify-center items-center gap-2">
-          <button className="flex justify-center items-center cursor-pointer">
+          <button className="flex gap-2 justify-center items-center cursor-pointer">
             <Image src="/map-pin.svg" height={24} width={24} alt="location" />
             <p>Our Store</p>
           </button>
