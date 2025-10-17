@@ -1,4 +1,5 @@
 import Navbar from "./components/layout/Navbar";
+import SubNavbar from "./components/layout/SubNavbar";
 import Topbar from "./components/layout/Topbar";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     <div >
         <Topbar/>
         <Navbar/>
+        <SubNavbar/>
       Home Page
     </div>
   );
