@@ -3,3 +3,7 @@
 *{
   font-family: inter;
 }
+
+.swiper-pagination-bullet {
+  background: rgb(237, 164, 21) !important;
+}
