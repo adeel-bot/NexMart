@@ -15,9 +15,11 @@ export default function Home() {
           <MainSlider/>
           <SubSlider/>
         </div>
-        <div className="product-grid">
-          <div className="flex justify-between py-5 px-12">
-            <div><h2 className="text-2xl font-bold text-[#1B5A7D]">Popular Products</h2></div>
+        <div className="product-grid flex flex-col gap-12 py-5 px-12 max-w-screen overflow-hidden">
+          <div className="flex justify-between ">
+            <div>
+              <h2 className="text-2xl font-bold text-[#1B5A7D]">Popular Products</h2>
+            </div>
             <div className="flex gap-4">
               <button className="border-[1.5px] text-sm text-[#1B5A7D] font-semibold border-gray-200 transition-all duration-75 ease-linear hover:border-[#003F62] py-2 px-5 rounded-2xl ">Cameras</button>
               <button className="border-[1.5px] text-sm text-[#1B5A7D] font-semibold border-gray-200 transition-all duration-75 ease-linear hover:border-[#003F62] py-2 px-5 rounded-2xl " >Laptops</button>
