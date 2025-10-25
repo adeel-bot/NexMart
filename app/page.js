@@ -4,6 +4,7 @@ import SubNavbar from "./components/layout/SubNavbar";
 import Topbar from "./components/layout/Topbar";
 import MainSlider from "./components/sections/MainSlider";
 import SubSlider from "./components/sections/SubSlider";
+import Banner from "./components/sections/Banner";
 
 export default function Home() {
   return (
@@ -28,6 +29,25 @@ export default function Home() {
             </div>
           </div>
           <Product_cards/>
+        </div>
+        <div className="relative flex justify-center items-center mb-16">
+          <Banner/>
+          <div className="absolute right-35 text-center flex flex-col gap-7">
+            <div >
+              <button className="bg-[#EDA415] px-5 py-3 cursor-pointer text-white text-sm rounded-2xl">
+                     New Laptop
+              </button>
+             </div>
+            <div className="flex flex-col gap-4 text-center">
+              <h1 className="text-4xl text-[#2E8FC5] font-extrabold">Sale up to 50% off</h1>
+                <p className="text-white">14 inch Hd Display</p>
+             </div>
+            <div>
+              <button className="bg-[#EDA415] px-5 py-3 cursor-pointer text-white text-sm rounded-2xl">
+                     Shop Now
+              </button>
+            </div>
+          </div>
         </div>
     </div>
   );
