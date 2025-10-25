@@ -5,7 +5,7 @@ import Topbar from "./components/layout/Topbar";
 import MainSlider from "./components/sections/MainSlider";
 import SubSlider from "./components/sections/SubSlider";
 import Banner from "./components/sections/Banner";
-
+import SubGrid from "./components/cards/Subgrid";
 export default function Home() {
   return (
     <div >
@@ -48,6 +48,9 @@ export default function Home() {
               </button>
             </div>
           </div>
+        </div>
+        <div className="mx-auto p-5">
+          <SubGrid/>
         </div>
     </div>
   );
