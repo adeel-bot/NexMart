@@ -58,14 +58,13 @@ const StripSlider = () => {
          style={{
         "--swiper-navigation-color": "rgb(237, 164, 21)", 
         "--swiper-pagination-color": "rgb(237, 164, 21)",
-
   }}
       >
         {items.map((item, index) => (
           <SwiperSlide key={index}>
             <div className="flex items-center gap-4 bg-white shadow-md border border-gray-200 rounded-2xl px-12 py-4 hover:shadow-lg transition duration-200 ease-in-out mt-3 mb-3">
               {/* Left side — image */}
-              <div className="relative w-24 h-24 flex-shrink-0">
+              <div className="relative w-24 h-24 shrink-0">
                 <Image
                   src={item.image}
                   alt={item.name}

@@ -6,7 +6,7 @@ const Radio = ({}) => {
   const [hover, setHover] = useState(null);
 
   return (
-    <div className="flex gap-1">
+    <div className="flex pl-1 gap-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <label key={star}>
           <input
