@@ -49,7 +49,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="mx-auto p-5">
+        <div className="mx-auto h-[75vh] p-5">
           <SubGrid/>
         </div>
     </div>
