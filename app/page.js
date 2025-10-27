@@ -61,9 +61,29 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-center items-center h-[75vh] p-5 bg-gray-50">
+      <div className="w-full flex justify-center items-center h-[75vh] p-5">
         <SubGrid />
       </div>
+          <div className="bg-[#e2f4ff] border border-transparent rounded-xl w-[85vw] mx-auto px-12 flex justify-between gap-3">
+            <div>
+              <h2>
+              Free Delivery
+              </h2>
+              <p>on order above 3500</p>
+            </div>
+            <div>
+              <h2>
+              Best Quality
+              </h2>
+              <p>best quality on low price</p>
+            </div>
+            <div>
+              <h2>
+              1 Year Warranty
+              </h2>
+              <p>Available Warranty</p>
+            </div>
+          </div>
     </div>
   );
 }
