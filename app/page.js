@@ -6,6 +6,7 @@ import MainSlider from "./components/sections/MainSlider";
 import SubSlider from "./components/sections/SubSlider";
 import Banner from "./components/sections/Banner";
 import SubGrid from "./components/cards/Subgrid";
+import Customers from "./components/cards/Customers";
 export default function Home() {
   return (
     <div>
@@ -64,7 +65,7 @@ export default function Home() {
       <div className="w-full flex justify-center items-center h-[75vh] p-5">
         <SubGrid />
       </div>
-          <div className="bg-[#e2f4ff] border border-transparent rounded-2xl w-[85vw] mx-auto px-12 flex justify-between gap-3">
+          <div className="bg-[#e2f4ff] border border-transparent rounded-2xl w-[85vw] mx-auto px-12 flex justify-between gap-3 mb-15">
             <div className="p-6 flex flex-col gap-3">
               <h2 className="text-[#003F62] font-bold text-xl">
               Free Delivery
@@ -83,6 +84,9 @@ export default function Home() {
               </h2>
               <p className="text-[#003F62]">Available Warranty</p>
             </div>
+          </div>
+          <div>
+            <Customers/>
           </div>
     </div>
   );
