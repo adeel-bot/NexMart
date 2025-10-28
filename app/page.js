@@ -88,6 +88,16 @@ export default function Home() {
           <div className="mb-15">
             <Customers/>
           </div>
+          <div className="mx-auto w-[85vw]">
+              <div className="bg-[#E2F4FF] flex flex-row p-10 justify-between">
+                  <div>Logo 1</div>
+                  <div>Logo 2</div>
+                  <div>Logo 3</div>
+                  <div>Logo 4</div>
+                  <div>Logo 5</div>
+              </div>
+          </div>
+          
     </div>
   );
 }
