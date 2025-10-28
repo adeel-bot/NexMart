@@ -85,7 +85,7 @@ export default function Home() {
               <p className="text-[#003F62]">Available Warranty</p>
             </div>
           </div>
-          <div>
+          <div className="mb-15">
             <Customers/>
           </div>
     </div>

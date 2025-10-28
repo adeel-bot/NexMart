@@ -59,7 +59,7 @@ const Customers = () => {
         className="rounded-2xl"
         style={{
           "--swiper-pagination-color": "rgb(237,164,21)",
-          "--swiper-pagination-bottom": "8px",
+          "--swiper-pagination-bottom": "1px",
         }}
         breakpoints={{
           320: { slidesPerView: 1 },
