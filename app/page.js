@@ -7,6 +7,7 @@ import SubSlider from "./components/sections/SubSlider";
 import Banner from "./components/sections/Banner";
 import SubGrid from "./components/cards/Subgrid";
 import Customers from "./components/cards/Customers";
+import Footer from "./components/layout/Footer";
 export default function Home() {
   return (
     <div>
@@ -97,7 +98,9 @@ export default function Home() {
                   <div>Logo 5</div>
               </div>
           </div>
-          
+          <div className="max-w-[100vw]">
+            <Footer/>
+          </div>
     </div>
   );
 }
