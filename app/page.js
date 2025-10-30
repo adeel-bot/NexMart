@@ -8,6 +8,7 @@ import Banner from "./components/sections/Banner";
 import SubGrid from "./components/cards/Subgrid";
 import Customers from "./components/cards/Customers";
 import Footer from "./components/layout/Footer";
+import StripSlider from "./components/sections/SubSlider";
 export default function Home() {
   return (
     <div>
@@ -16,7 +17,7 @@ export default function Home() {
       <SubNavbar />
       <div className="hero flex flex-col">
         <MainSlider />
-        <SubSlider />
+        <StripSlider />
       </div>
       <div className="product-grid flex flex-col gap-12 py-5 px-12 max-w-screen overflow-hidden">
         <div className="flex justify-between ">
