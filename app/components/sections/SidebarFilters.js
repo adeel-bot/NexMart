@@ -34,12 +34,12 @@ export default function SidebarFilters({ onFilterChange }) {
   ];
 
   return (
-    <div className="w-70 h-screen sticky top-4 bg-white p-4 border rounded-xl shadow-md overflow-y-auto space-y-4">
+    <div className="w-70 h-screen sticky top-4 bg-white p-4 border-[1.5px] border-gray-300 rounded-2xl overflow-y-auto space-y-4">
       {sections.map((section) => (
         <div key={section.label} className="border-b pb-2">
           <button
             onClick={() => toggleSection(section.label)}
-            className="w-full flex justify-between items-center text-left font-semibold text-lg"
+            className="w-full text-[#1B5A7D] flex justify-between items-center text-left font-semibold text-lg"
           >
             {section.label}
             <span className="text-xl">{openSection === section.label ? "-" : "+"}</span>

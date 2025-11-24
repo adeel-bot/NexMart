@@ -13,7 +13,7 @@ const Product = () => {
       <Navbar />
       <SubNavbar />
       <div className='flex mt-20'>
-        <div className='w-[30vw] p-7'>
+        <div className='w-[30vw] p-7 '>
           <aside>
           <SidebarFilters/>
           </aside>
