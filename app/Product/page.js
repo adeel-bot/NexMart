@@ -12,13 +12,11 @@ const Product = () => {
          <Topbar />
       <Navbar />
       <SubNavbar />
-      <div className='flex mt-20'>
-        <div className='w-[30vw] p-7 '>
-          <aside>
+      <div className='flex flex-col md:flex-row gap-4 mt-20'>
+        <div className='p-4 '>  
           <SidebarFilters/>
-          </aside>
         </div>
-        <div className='w-screen'>
+        <div className='w-full'>
           <All_Products/>
         </div>
       </div>
