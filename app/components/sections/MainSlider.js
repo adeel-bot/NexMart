@@ -14,7 +14,7 @@ const MainSlider = () => {
       name: "Camera",
       image: "/camera.jpg",
       price: "25000",
-      buy_link: "#",
+      buy_link: "#", 
       detail_link: "/Product",
     },
     {

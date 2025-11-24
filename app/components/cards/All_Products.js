@@ -19,7 +19,7 @@ const All_Products = () => {
     
   return (
     <div>
-            <div className="w-full grid p-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="md:w-full w-xl mx-auto items-center text-center  grid p-4 md:pr-4 md:pb-4 md:pt-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {products.map((product, idx) => (
                 <div
                   key={idx}
@@ -38,7 +38,7 @@ const All_Products = () => {
                       {product.name}
                     </h2>
                     <p className="font-semibold px-2 ">$ {product.price}</p>
-                    <div>
+                    <div className='mx-auto'>
                       <Radio rating="rating" />
                     </div>
                   </div>

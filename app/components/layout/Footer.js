@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <div className="bg-[#E2F4FF] py-10 px-17 ">
       <div
-        className="flex justify-between  items-center max-w-[88vw] mx-auto border border-transparent
+        className="flex justify-between flex-wrap items-center max-w-[88vw] mx-auto border border-transparent
             rounded-2xl bg-white p-12"
       >
         <div className="font-bold text-2xl text-[#1B5A7D]">

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 const SubNavbar = () => {
   return (
-    <div className="subNav bg-[#f4f4f4] flex justify-between items-center px-13">
+    <div className="subNav bg-[#f4f4f4] flex md:flex-row flex-col justify-between items-center px-13">
         <div className="subNav-left flex gap-17 ">
             <div className="browse-cat flex items-center p-3 h-13 bg-[#f3b63d] text-white ">
                 <button className="flex items-center text-center gap-1 cursor-pointer">Browse Categories
