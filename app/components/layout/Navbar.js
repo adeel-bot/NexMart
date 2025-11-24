@@ -1,9 +1,15 @@
-import Image from "next/image"
+    'use client';
+import Image from "next/image";
+import Link from "next/link";
 const Navbar = () => {
   return (
     <div className="navbar bg-[#003f62] flex justify-between items-center py-5 px-13">
         <div className="nav-left flex justify-between gap-25 items-center">
-            <div className="nav-logo text-xl font-bold text-white">NexMart</div>
+            <div className="nav-logo text-xl font-bold text-white">
+                <Link href="/">
+                NexMart
+                </Link>
+                </div>
             <div className="nav-search flex items-center bg-white border rounded-l-2xl rounded-r-xl">
                 <div className="w-[25vw]">
                 <input className="bg-white h-12 w-full text-black border placeholder:text-sm placeholder:text-black outline-0 p-4 border-white rounded-l-xl" type="search" name="search" id="" placeholder="Search Any Thing" spellCheck="false" />

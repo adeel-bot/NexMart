@@ -15,28 +15,28 @@ const MainSlider = () => {
       image: "/camera.jpg",
       price: "25000",
       buy_link: "#",
-      detail_link: "#",
+      detail_link: "/Product",
     },
     {
       name: "HeadPhone",
       image: "/headphone.png",
       price: "10000",
       buy_link: "#",
-      detail_link: "#",
+      detail_link: "/Product",
     },
     {
       name: "Laptop",
       image: "/laptop.jpg",
       price: "150000",
       buy_link: "#",
-      detail_link: "#",
+      detail_link: "/Product",
     },
     {
       name: "Gaming Console",
       image: "/game-console.png",
       price: "8000",
       buy_link: "#",
-      detail_link: "#",
+      detail_link: "/Product",
     },
   ];
 
