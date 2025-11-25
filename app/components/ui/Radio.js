@@ -2,20 +2,20 @@
 import React from "react";
 
 const Radio = ({ rating = 0 }) => {
-  // Clamp rating between 0 and 5
+  // Ensure rating is number and between 0-5
   const validRating = Math.min(Math.max(Number(rating) || 0, 0), 5);
 
-  const fullStars = Math.floor(validRating);
-  const decimal = validRating - fullStars;
+  // Round to nearest 0.5
+  const roundedRating = Math.round(validRating * 2) / 2;
 
-  const hasHalfStar = decimal >= 0.25 && decimal < 0.75;
-  const adjustedFullStars = decimal >= 0.75 ? fullStars + 1 : fullStars;
-  const emptyStars = 5 - adjustedFullStars - (hasHalfStar ? 1 : 0);
+  const fullStars = Math.floor(roundedRating);
+  const hasHalfStar = roundedRating % 1 !== 0;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
     <div className="flex pl-1 gap-1">
       {/* Full Stars */}
-      {[...Array(adjustedFullStars)].map((_, i) => (
+      {[...Array(fullStars)].map((_, i) => (
         <span key={`full-${i}`} className="text-yellow-400 text-2xl">
           ★
         </span>
