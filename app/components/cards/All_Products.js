@@ -64,4 +64,4 @@ const All_Products = () => {
   )
 }
 
-export default All_Products
+export default All_Products;
