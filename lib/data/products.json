@@ -1,0 +1,167 @@
+[
+  {
+    "id": 1,
+    "slug": "classic-white-tee",
+    "title": "Classic White Tee",
+    "description": "Soft cotton t-shirt perfect for everyday wear.",
+    "price": 15,
+    "category": "Men",
+    "stock": 42,
+    "rating": 4.5,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 2,
+    "slug": "denim-jacket",
+    "title": "Denim Jacket",
+    "description": "Vintage-style denim jacket with a modern fit.",
+    "price": 59,
+    "category": "Unisex",
+    "stock": 18,
+    "rating": 4.7,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 3,
+    "slug": "black-hoodie",
+    "title": "Black Hoodie",
+    "description": "Comfortable fleece hoodie ideal for chilly nights.",
+    "price": 35,
+    "category": "Men",
+    "stock": 30,
+    "rating": 4.2,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 4,
+    "slug": "cargo-pants",
+    "title": "Cargo Pants",
+    "description": "Utility-style pants with multiple spacious pockets.",
+    "price": 42,
+    "category": "Men",
+    "stock": 25,
+    "rating": 4.3,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 5,
+    "slug": "floral-summer-dress",
+    "title": "Floral Summer Dress",
+    "description": "Lightweight dress with a flowing silhouette.",
+    "price": 49,
+    "category": "Women",
+    "stock": 20,
+    "rating": 4.6,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 6,
+    "slug": "leather-belt",
+    "title": "Leather Belt",
+    "description": "Premium leather belt with a sleek metallic buckle.",
+    "price": 25,
+    "category": "Unisex",
+    "stock": 50,
+    "rating": 4.1,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 7,
+    "slug": "athletic-shorts",
+    "title": "Athletic Shorts",
+    "description": "Breathable sports shorts with quick-dry fabric.",
+    "price": 22,
+    "category": "Men",
+    "stock": 33,
+    "rating": 4.4,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 8,
+    "slug": "knitted-sweater",
+    "title": "Knitted Sweater",
+    "description": "Cozy knitted sweater crafted for winter warmth.",
+    "price": 55,
+    "category": "Women",
+    "stock": 17,
+    "rating": 4.8,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 9,
+    "slug": "slim-fit-jeans",
+    "title": "Slim Fit Jeans",
+    "description": "Stylish slim-fit denim with stretch comfort.",
+    "price": 40,
+    "category": "Unisex",
+    "stock": 28,
+    "rating": 4.3,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 10,
+    "slug": "baseball-cap",
+    "title": "Baseball Cap",
+    "description": "Adjustable cap made with breathable cotton.",
+    "price": 18,
+    "category": "Unisex",
+    "stock": 60,
+    "rating": 4.0,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 11,
+    "slug": "oversized-graphic-tee",
+    "title": "Oversized Graphic Tee",
+    "description": "Trendy oversized tee with bold graphic print.",
+    "price": 28,
+    "category": "Unisex",
+    "stock": 35,
+    "rating": 4.6,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 12,
+    "slug": "puffer-jacket",
+    "title": "Puffer Jacket",
+    "description": "Warm puffer jacket with lightweight insulation.",
+    "price": 89,
+    "category": "Men",
+    "stock": 12,
+    "rating": 4.7,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 13,
+    "slug": "silk-scarf",
+    "title": "Silk Scarf",
+    "description": "Elegant silk scarf with a soft luxurious feel.",
+    "price": 30,
+    "category": "Women",
+    "stock": 45,
+    "rating": 4.5,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 14,
+    "slug": "running-shoes",
+    "title": "Running Shoes",
+    "description": "Lightweight running shoes with breathable mesh.",
+    "price": 75,
+    "category": "Unisex",
+    "stock": 22,
+    "rating": 4.6,
+    "image": "https://picsum.photos/200/300"
+  },
+  {
+    "id": 15,
+    "slug": "checkered-flannel-shirt",
+    "title": "Checkered Flannel Shirt",
+    "description": "Soft flannel shirt with a classic check pattern.",
+    "price": 32,
+    "category": "Men",
+    "stock": 26,
+    "rating": 4.4,
+    "image": "https://picsum.photos/200/300"
+  }
+]

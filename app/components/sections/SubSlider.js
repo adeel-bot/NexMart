@@ -14,31 +14,31 @@ const StripSlider = () => {
       name: "DSLR Cameras",
       image: "/camera.jpg",
       relatedCount: 12,
-      link: "/Product",
+      link: "/Products",
     },
     {
       name: "Laptops",
       image: "/laptop.jpg",
       relatedCount: 8,
-      link: "/Product",
+      link: "/Products",
     },
     {
       name: "Gaming Console",
       image: "/game-console.png",
       relatedCount: 6,
-      link: "/Product",
+      link: "/Products",
     },
     {
       name: "Headphones",
       image: "/headphone.png",
       relatedCount: 15,
-      link: "/Product",
+      link: "/Products",
     },
     {
       name: "Speaker",
       image: "/speaker.jpg",
       relatedCount: 10,
-      link: "/Product",
+      link: "/Products",
     },
   ];
 

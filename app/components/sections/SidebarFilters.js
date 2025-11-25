@@ -34,7 +34,7 @@ export default function SidebarFilters({ onFilterChange }) {
   ];
 
   return (
-    <div className="w-full min-w-2xs :max-w-xs h-screen bg-white p-4 border-[1.5px] border-gray-300 rounded-2xl overflow-y-auto space-y-4">
+    <div className="sticky top-0 min-w-2xs :max-w-xs h-screen bg-white p-4 border-[1.5px] border-gray-300 rounded-2xl overflow-y-auto space-y-4">
       {sections.map((section) => (
         <div key={section.label} className="border-b pb-2">
           <button
