@@ -8,7 +8,10 @@ import All_Products from '../components/cards/All_Products';
 import SidebarFilters from '../components/sections/SidebarFilters';
 import Banner from '../components/sections/Banner';
 import Footer from '../components/layout/Footer';
+
+
 const Product = () => {
+
   return (
     <div>
          <Topbar />

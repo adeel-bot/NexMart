@@ -7,7 +7,7 @@
     "price": 15,
     "category": "Men",
     "stock": 42,
-    "rating": 4.5,
+    "rating": 3.4,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -18,7 +18,7 @@
     "price": 59,
     "category": "Unisex",
     "stock": 18,
-    "rating": 4.7,
+    "rating": 4.9,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -29,7 +29,7 @@
     "price": 35,
     "category": "Men",
     "stock": 30,
-    "rating": 4.2,
+    "rating": 2.8,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -40,7 +40,7 @@
     "price": 42,
     "category": "Men",
     "stock": 25,
-    "rating": 4.3,
+    "rating": 4.1,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -51,7 +51,7 @@
     "price": 49,
     "category": "Women",
     "stock": 20,
-    "rating": 4.6,
+    "rating": 4.8,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -62,7 +62,7 @@
     "price": 25,
     "category": "Unisex",
     "stock": 50,
-    "rating": 4.1,
+    "rating": 3.7,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -73,7 +73,7 @@
     "price": 22,
     "category": "Men",
     "stock": 33,
-    "rating": 4.4,
+    "rating": 4.0,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -84,7 +84,7 @@
     "price": 55,
     "category": "Women",
     "stock": 17,
-    "rating": 4.8,
+    "rating": 4.6,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -95,7 +95,7 @@
     "price": 40,
     "category": "Unisex",
     "stock": 28,
-    "rating": 4.3,
+    "rating": 3.9,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -106,7 +106,7 @@
     "price": 18,
     "category": "Unisex",
     "stock": 60,
-    "rating": 4.0,
+    "rating": 4.3,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -117,7 +117,7 @@
     "price": 28,
     "category": "Unisex",
     "stock": 35,
-    "rating": 4.6,
+    "rating": 4.7,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -128,7 +128,7 @@
     "price": 89,
     "category": "Men",
     "stock": 12,
-    "rating": 4.7,
+    "rating": 3.6,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -150,7 +150,7 @@
     "price": 75,
     "category": "Unisex",
     "stock": 22,
-    "rating": 4.6,
+    "rating": 4.9,
     "image": "https://picsum.photos/200/300"
   },
   {
@@ -161,7 +161,7 @@
     "price": 32,
     "category": "Men",
     "stock": 26,
-    "rating": 4.4,
+    "rating": 4.2,
     "image": "https://picsum.photos/200/300"
   }
 ]
