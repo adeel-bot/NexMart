@@ -68,7 +68,7 @@ export default function Reviews({ productId, productName }) {
       )}
 
       {activeTab === "reviews" && (
-        <div className="space-y-6">
+        <div className="grid grid-cols-3 gap-7 px-4">
           {reviews.map((review) => (
             <div
               key={review.id}
