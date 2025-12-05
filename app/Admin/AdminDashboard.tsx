@@ -9,7 +9,7 @@ export interface Admin {
   password: string;
   role: string;
   createdAt: string;
-}
+};
 
 export interface Category {
   id: number;
@@ -17,7 +17,7 @@ export interface Category {
   description?: string | null;
   adminId: number;
   createdAt?: string;
-}
+};
 
 export interface Product {
   id: number;
@@ -33,7 +33,7 @@ export interface Product {
   category?: {
     name: string;
   };
-}
+};
 
 export interface Order {
   id: number;
@@ -60,7 +60,7 @@ export interface Order {
     status: string;
     method: string;
   };
-}
+};
 
 export interface Report {
   id: number;
@@ -73,7 +73,7 @@ export interface Report {
   admin?: {
     name: string;
   };
-}
+};
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'products' | 'categories' | 'orders' | 'reports'>('products');
@@ -461,7 +461,7 @@ const AdminDashboard: React.FC = () => {
       case 'orders':
         return (
           <div className="content-section">
-            {renderSectionHeader('Manage Orders')}
+            {renderSectionHeader('Manage Orders', handleUpdateOrderStatus)}
             {renderTable(
               orders, 
               ['id', 'customer.name', 'status', 'totalAmount', 'orderDate'], 

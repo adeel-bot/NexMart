@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import Radio from "@/app/components/ui/Radio";
+import Radio from "../../components/ui/Radio";
 
-export default function Reviews({ productId, productName }) {
+export default function Reviews({ product }) {
   const [activeTab, setActiveTab] = useState("description");
 
   // random reviews data
@@ -56,13 +56,10 @@ export default function Reviews({ productId, productName }) {
       {/* Tab content */}
       {activeTab === "description" && (
         <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm text-gray-700">
-          <h2 className="text-2xl font-bold mb-4">{productName}</h2>
+          <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
           <p className="text-gray-600 leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla
-            accusantium voluptas eos. Libero, quidem quod tempora omnis
-            recusandae nesciunt culpa! Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua.
+            {product.description} <br/>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum eligendi dolorum quos nam. Laboriosam vel nulla quas harum! Totam, quo!
           </p>
         </div>
       )}
@@ -88,7 +85,7 @@ export default function Reviews({ productId, productName }) {
           ))}
           {/* Placeholder for adding a review */}
           <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 text-center text-gray-500">
-            No more reviews yet. Be the first to review {productName}!
+            No more reviews yet. Be the first to review {product.name}!
           </div>
         </div>
       )}

@@ -4,18 +4,25 @@ import { useState, useEffect} from "react";
 import Image from "next/image";
 import Radio from "../ui/Radio";
 import Link from "next/link";
-import { getAllProducts } from '@/lib/data/getProducts';
+
 
 const All_Products = () => {
         const [productData, setProductData] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const products = await getAllProducts();
+            const products = await fetch('/api/products').then(res => res.json());
             setProductData(products);
         } ;
         fetchProducts();  
     }, []);
+    // useEffect(() => {
+    //     const fetchProducts = async () => {
+    //         const products = await getAllProducts();
+    //         setProductData(products);
+    //     } ;
+    //     fetchProducts();  
+    // }, []);
 
     
     //  const [products] = useState([
@@ -35,7 +42,7 @@ const All_Products = () => {
     <div>
             <div className="md:w-full w-xl mx-auto items-center text-center  grid p-4 md:pr-4 md:pb-4 md:pt-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {productData.map((product, idx) => (
-                <Link href={`/Product/${product.slug}`} key={idx}>
+                <Link href={`/Product/${product.id}`} key={idx}>
                 <div
                   className="flex flex-col p-5 border-[1.5px] border-gray-300 rounded-2xl hover:scale-[1.01] duration-200 transition-all ease-in-out"
                 >
@@ -43,17 +50,17 @@ const All_Products = () => {
                     <Image
                       width={110}
                       height={110}
-                      src={product.image}
-                      alt={product.title}
+                      src={product.imageUrl}
+                      alt={product.name}
                     />
                   </div>
                   <div className="flex flex-col gap-2">
                     <h2 className="text-lg px-2 font-bold text-[#1B5A7D]">
-                      {product.title}
+                      {product.name}
                     </h2>
                     <p className="font-semibold px-2 ">$ {product.price}</p>
                     <div className='mx-auto'>
-                      <Radio rating={product.rating} />
+                      <Radio rating={4.5} />
                     </div>
                   </div>
                 </div>
