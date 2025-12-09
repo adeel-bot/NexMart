@@ -21,8 +21,10 @@ const Navbar = () => {
         </div>
         <div className="nav-right text-white flex gap-x-6">
             <div className="nav-sigin flex justify-center  gap-2  items-center">
+                <Link href='/Admin' className="flex gap-2">
                 <Image src="/user.svg" height={22} width={22} alt="user" />
-                <p className="font-light">Sign In</p>
+                <p className="font-light">Admin</p>
+                </Link>
             </div>
             <div className="nav-fav flex justify-center  gap-2 items-center">
                 <Image src="/heart-plus.svg" height={22} width={22} alt="heart" />
