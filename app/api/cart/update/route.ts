@@ -1,15 +1,16 @@
 // app/api/cart/update/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "../../../../lib/prisma";
-import { withSession } from "../../../../lib/session";
+import { getSession } from "../../../../lib/session";
+import { cookies } from "next/headers";
 
-export const PUT = withSession(async (req: any) => {
+export async function PUT (req: NextRequest) {
   try {
-    const user = req.session.get("user");
-    
-    if (!user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
+     const session = await getSession(await cookies());
+        
+        if (!session.isLoggedIn) {
+          return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+        }
 
     const { itemId, quantity } = await req.json();
 
@@ -53,4 +54,4 @@ export const PUT = withSession(async (req: any) => {
     console.error("Error updating cart:", error);
     return NextResponse.json({ error: "Failed to update cart" }, { status: 500 });
   }
-});
+};
