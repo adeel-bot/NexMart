@@ -9,7 +9,9 @@ import SubGrid from "./components/cards/Subgrid";
 import Customers from "./components/cards/Customers";
 import Footer from "./components/layout/Footer";
 import StripSlider from "./components/sections/SubSlider";
+import Link from "next/link";
 export default function Home() {
+    
   return (
     <div>
       <Topbar />
@@ -17,7 +19,7 @@ export default function Home() {
       <SubNavbar />
       <div className="hero flex flex-col">
         <MainSlider />
-        <StripSlider />
+        {/* <StripSlider /> */}
       </div>
       <div className="product-grid flex flex-col gap-12 py-5 px-12 max-w-screen overflow-hidden">
         <div className="flex justify-between ">
@@ -28,16 +30,16 @@ export default function Home() {
           </div>
           <div className="flex gap-4">
             <button className="border-[1.5px] text-sm text-[#1B5A7D] font-semibold border-gray-200 transition-all duration-75 ease-linear hover:border-[#003F62] py-2 px-5 rounded-2xl ">
-              Cameras
+              Men
             </button>
             <button className="border-[1.5px] text-sm text-[#1B5A7D] font-semibold border-gray-200 transition-all duration-75 ease-linear hover:border-[#003F62] py-2 px-5 rounded-2xl ">
-              Laptops
+              Women
             </button>
             <button className="border-[1.5px] text-sm text-[#1B5A7D] font-semibold border-gray-200 transition-all duration-75 ease-linear hover:border-[#003F62] py-2 px-5 rounded-2xl ">
-              Tablets
+              Children
             </button>
             <button className="border-[1.5px] text-sm text-[#1B5A7D] font-semibold border-gray-200 transition-all duration-75 ease-linear hover:border-[#003F62] py-2 px-5 rounded-2xl ">
-              Mouse
+              Accessories
             </button>
           </div>
         </div>
@@ -45,22 +47,22 @@ export default function Home() {
       </div>
       <div className="relative flex justify-center items-center mb-16">
         <Banner />
-        <div className="absolute right-35 text-center flex flex-col gap-7">
+        <div className="absolute right-35 text-center bg-[#ffffffc2] backdrop-blur-md p-7 rounded-2xl flex flex-col gap-7">
           <div>
-            <button className="bg-[#EDA415] px-5 py-3 cursor-pointer text-white text-sm rounded-2xl">
-              New Laptop
-            </button>
+            <Link href='/Products' className="bg-[#EDA415] px-5 py-3 cursor-pointer text-black text-sm rounded-2xl">
+              New Collection
+            </Link>
           </div>
           <div className="flex flex-col gap-4 text-center">
-            <h1 className="text-4xl text-[#2E8FC5] font-extrabold">
+            <h1 className="text-4xl text-[#154863] font-extrabold">
               Sale up to 50% off
             </h1>
-            <p className="text-white">14 inch Hd Display</p>
+            <p className="text-black">Premium Quality Clothing</p>
           </div>
           <div>
-            <button className="bg-[#EDA415] px-5 py-3 cursor-pointer text-white text-sm rounded-2xl">
+            <Link href='/Products' className="bg-[#EDA415] px-5 py-3 cursor-pointer text-black text-sm rounded-2xl">
               Shop Now
-            </button>
+            </Link>
           </div>
         </div>
       </div>

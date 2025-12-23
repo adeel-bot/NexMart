@@ -50,22 +50,13 @@ CREATE TABLE "Product" (
 );
 
 -- CreateTable
-CREATE TABLE "Cart" (
-    "id" SERIAL NOT NULL,
-    "customerId" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Cart_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "CartItem" (
     "id" SERIAL NOT NULL,
     "cartId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
-    "quantity" INTEGER NOT NULL,
-    "unitPrice" DECIMAL(10,2) NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 1,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "CartItem_pkey" PRIMARY KEY ("id")
 );
@@ -145,6 +136,16 @@ CREATE TABLE "Report" (
     CONSTRAINT "Report_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Cart" (
+    "id" SERIAL NOT NULL,
+    "customerId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Cart_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 
@@ -152,25 +153,25 @@ CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 CREATE UNIQUE INDEX "Customer_email_key" ON "Customer"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Cart_customerId_key" ON "Cart"("customerId");
+CREATE UNIQUE INDEX "CartItem_cartId_productId_key" ON "CartItem"("cartId", "productId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_orderId_key" ON "Payment"("orderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Cart_customerId_key" ON "Cart"("customerId");
 
 -- AddForeignKey
 ALTER TABLE "Category" ADD CONSTRAINT "Category_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Cart" ADD CONSTRAINT "Cart_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "Customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "Cart"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "Cart"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "CartItem" ADD CONSTRAINT "CartItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -198,3 +199,6 @@ ALTER TABLE "ComboItem" ADD CONSTRAINT "ComboItem_productId_fkey" FOREIGN KEY ("
 
 -- AddForeignKey
 ALTER TABLE "Report" ADD CONSTRAINT "Report_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Cart" ADD CONSTRAINT "Cart_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "Customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

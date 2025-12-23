@@ -4,7 +4,7 @@ import { useState, useEffect} from "react";
 import Image from "next/image";
 import Radio from "../ui/Radio";
 import Link from "next/link";
-
+import AddToCartButton from '../AddToCartButton';
 
 const All_Products = () => {
         const [productData, setProductData] = useState([]);
@@ -62,6 +62,7 @@ const All_Products = () => {
                     <div className='mx-auto'>
                       <Radio rating={4.5} />
                     </div>
+                    <AddToCartButton productId={product.id} />
                   </div>
                 </div>
               </Link>

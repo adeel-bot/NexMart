@@ -1,6 +1,7 @@
     'use client';
 import Image from "next/image";
 import Link from "next/link";
+import CartIcon from "../CartIcon";
 const Navbar = () => {
   return (
     <div className="navbar bg-[#003f62] flex justify-between items-center py-5 px-13">
@@ -31,7 +32,7 @@ const Navbar = () => {
                 <p className="font-light">Favourite</p>
             </div>
             <div className="nav-cart flex justify-center gap-2 items-center">
-                <Image src="/shopping-bag.svg" height={20} width={20} alt="cart" />
+                <CartIcon/>
                 <p className="font-light">Cart</p>
             </div>
         </div>

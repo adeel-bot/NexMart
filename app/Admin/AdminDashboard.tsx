@@ -16,7 +16,6 @@ export interface Category {
   name: string;
   description?: string | null;
   adminId: number;
-  createdAt?: string;
 }
 
 export interface Product {
@@ -32,6 +31,33 @@ export interface Product {
   adminId: number;
   category?: {
     name: string;
+  };
+}
+
+export interface Customer {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  defaultAddress?: string | null;
+  createdAt: string;
+  cart?: {
+    id: number;
+    items: CartItem[];
+  };
+}
+
+export interface CartItem {
+  id: number;
+  cartId: number;
+  productId: number;
+  quantity: number;
+  createdAt: string;
+  updatedAt: string;
+  product?: {
+    name: string;
+    price: string;
+    imageUrl?: string;
   };
 }
 
@@ -75,14 +101,40 @@ export interface Report {
   };
 }
 
+export interface Combo {
+  id: number;
+  customerId: number;
+  name: string;
+  description?: string | null;
+  totalPrice: string;
+  isSaved: boolean;
+  createdAt: string;
+  customer?: {
+    name: string;
+  };
+  items?: Array<{
+    id: number;
+    productId: number;
+    quantity: number;
+    unitPrice: string;
+    product?: {
+      name: string;
+    };
+  }>;
+}
+
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
-    "products" | "categories" | "orders" | "reports"
-  >("products");
+    "dashboard" | "products" | "categories" | "orders" | "customers" | "reports" | "combos"
+  >("dashboard");
+  
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
+  const [combos, setCombos] = useState<Combo[]>([]);
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notification, setNotification] = useState<{
@@ -92,13 +144,11 @@ const AdminDashboard: React.FC = () => {
 
   const API_BASE = "/api";
 
-  /** Show notification and auto-hide after 3 seconds */
   const showNotification = (message: string, type: "success" | "error") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
   };
 
-  /** Generic typed fetch helper */
   const fetchData = async <T,>(endpoint: string): Promise<T[]> => {
     try {
       const res = await fetch(`${API_BASE}${endpoint}`);
@@ -108,15 +158,16 @@ const AdminDashboard: React.FC = () => {
         setError(`Failed to fetch ${endpoint}: ${res.status}`);
         return [];
       }
+      
       const contentType = res.headers.get("content-type") || "";
       if (!contentType.includes("application/json")) {
         console.error(`API ${endpoint} returned non-JSON: ${contentType}`);
         setError(`Invalid response format from ${endpoint}`);
         return [];
       }
+      
       const data = await res.json();
 
-      // Handle error responses
       if (data.error) {
         setError(data.error);
         return [];
@@ -141,11 +192,17 @@ const AdminDashboard: React.FC = () => {
         case "/products":
           setProducts(await fetchData<Product>("/products"));
           break;
+        case "/customers":
+          setCustomers(await fetchData<Customer>("/customers"));
+          break;
         case "/orders":
           setOrders(await fetchData<Order>("/orders"));
           break;
         case "/reports":
           setReports(await fetchData<Report>("/reports"));
+          break;
+        case "/combos":
+          setCombos(await fetchData<Combo>("/combos"));
           break;
         default:
           break;
@@ -163,16 +220,20 @@ const AdminDashboard: React.FC = () => {
   const refreshAllLists = async () => {
     setLoading(true);
     try {
-      const [cats, prods, ords, reps] = await Promise.all([
+      const [cats, prods, custs, ords, reps, cmbs] = await Promise.all([
         fetchData<Category>("/categories"),
         fetchData<Product>("/products"),
+        fetchData<Customer>("/customers"),
         fetchData<Order>("/orders"),
         fetchData<Report>("/reports"),
+        fetchData<Combo>("/combos"),
       ]);
       setCategories(cats);
       setProducts(prods);
+      setCustomers(custs);
       setOrders(ords);
       setReports(reps);
+      setCombos(cmbs);
       showNotification("All data refreshed successfully!", "success");
     } catch (err) {
       console.error("Error refreshing lists:", err);
@@ -198,7 +259,7 @@ const AdminDashboard: React.FC = () => {
         body: JSON.stringify({
           name,
           description: description || null,
-          adminId: 1, // Assuming admin ID 1 from seed
+          adminId: 1,
         }),
       });
 
@@ -219,7 +280,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  /** Update Category */
   const handleUpdateCategory = async (category: Category) => {
     const name = prompt("Update category name:", category.name);
     if (!name) return;
@@ -253,7 +313,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  /** Delete Category */
   const handleDeleteCategory = async (id: number) => {
     if (!confirm("Delete this category?")) return;
 
@@ -303,7 +362,7 @@ const AdminDashboard: React.FC = () => {
           price: parseFloat(price),
           stock: parseInt(stock),
           categoryId: parseInt(categoryId),
-          adminId: 1, // Assuming admin ID 1
+          adminId: 1,
           sku: sku || null,
           imageUrl: imageUrl || null,
         }),
@@ -326,7 +385,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  /** Update Product */
   const handleUpdateProduct = async (product: Product) => {
     const name = prompt("Name:", product.name);
     const price = prompt("Price:", product.price);
@@ -362,7 +420,6 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  /** Delete Product */
   const handleDeleteProduct = async (id: number) => {
     if (!confirm("Delete product?")) return;
 
@@ -392,13 +449,12 @@ const AdminDashboard: React.FC = () => {
     if (!newStatus || newStatus === currentStatus) return;
 
     try {
-      const response = await fetch(`${API_BASE}/orders`, {
+      const response = await fetch(`${API_BASE}/orders/${orderId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          orderId,
           status: newStatus,
         }),
       });
@@ -421,14 +477,29 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  /** Customer Operations */
+  const handleViewCustomerCart = async (customerId: number) => {
+    try {
+      const response = await fetch(`${API_BASE}/customers/${customerId}/cart`);
+      if (response.ok) {
+        const cartData = await response.json();
+        alert(JSON.stringify(cartData, null, 2));
+      } else {
+        showNotification("Failed to fetch cart", "error");
+      }
+    } catch {
+      showNotification("Error fetching cart", "error");
+    }
+  };
+
   /** Report Operations */
   const handleGenerateReport = async () => {
     const reportType = prompt("Enter report type (SALES/INVENTORY):");
     if (
       !reportType ||
-      !["SALES", "INVENTORY"].includes(reportType.toUpperCase())
+      !["SALES", "INVENTORY", "SALES_SUMMARY"].includes(reportType.toUpperCase())
     ) {
-      showNotification("Report type must be SALES or INVENTORY", "error");
+      showNotification("Report type must be SALES, INVENTORY, or SALES_SUMMARY", "error");
       return;
     }
 
@@ -450,7 +521,7 @@ const AdminDashboard: React.FC = () => {
           reportType: reportType.toUpperCase(),
           periodStart,
           periodEnd,
-          adminId: 1, // Assuming admin ID 1
+          adminId: 1,
         }),
       });
 
@@ -459,7 +530,6 @@ const AdminDashboard: React.FC = () => {
         setReports((prev) => [newReport, ...prev]);
         showNotification("Report generated successfully!", "success");
 
-        // Show report data in alert
         try {
           const data = JSON.parse(newReport.dataJson);
           alert(
@@ -484,7 +554,7 @@ const AdminDashboard: React.FC = () => {
       showNotification("Failed to generate report", "error");
     }
   };
-  /** Delete Report */
+
   const handleDeleteReport = async (id: number) => {
     if (!confirm("Delete this report?")) return;
 
@@ -505,14 +575,48 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  /** Render section header with actions */
+  /** Combo Operations */
+  const handleViewCombo = async (comboId: number) => {
+    try {
+      const response = await fetch(`${API_BASE}/combos/${comboId}`);
+      if (response.ok) {
+        const comboData = await response.json();
+        alert(JSON.stringify(comboData, null, 2));
+      } else {
+        showNotification("Failed to fetch combo details", "error");
+      }
+    } catch {
+      showNotification("Error fetching combo", "error");
+    }
+  };
+
+  const handleDeleteCombo = async (id: number) => {
+    if (!confirm("Delete this combo?")) return;
+
+    try {
+      const response = await fetch(`${API_BASE}/combos/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setCombos((prev) => prev.filter((c) => c.id !== id));
+        showNotification("Combo deleted!", "success");
+      } else {
+        const errorData = await response.json();
+        showNotification(`Failed: ${errorData.error}`, "error");
+      }
+    } catch {
+      showNotification("Delete error", "error");
+    }
+  };
+
   const renderSectionHeader = (
     title: string,
     onCreate?: () => void,
     onAction?: () => void,
     actionLabel?: string
   ) => {
-    const endpoint = `/${title.toLowerCase().replace("manage ", "")}s`;
+    const endpoint = `/${title.toLowerCase().replace("manage ", "").replace(" ", "")}`;
 
     return (
       <div className="section-header">
@@ -577,7 +681,6 @@ const AdminDashboard: React.FC = () => {
             <tr key={item.id}>
               {columns.map((col) => (
                 <td key={col} className={`col-${col}`}>
-                  {/* Handle nested objects */}
                   {(() => {
                     const keys = col.split(".");
                     let value: any = item;
@@ -599,6 +702,43 @@ const AdminDashboard: React.FC = () => {
 
   const getTabContent = () => {
     switch (activeTab) {
+      case "dashboard":
+        return (
+          <div className="dashboard-grid">
+            <div className="stats-cards">
+              <div className="stat-card">
+                <h3>📦 Total Products</h3>
+                <p className="stat-number">{products.length}</p>
+              </div>
+              <div className="stat-card">
+                <h3>📁 Categories</h3>
+                <p className="stat-number">{categories.length}</p>
+              </div>
+              <div className="stat-card">
+                <h3>👥 Customers</h3>
+                <p className="stat-number">{customers.length}</p>
+              </div>
+              <div className="stat-card">
+                <h3>📋 Orders</h3>
+                <p className="stat-number">{orders.length}</p>
+              </div>
+            </div>
+            
+            <div className="recent-orders">
+              <h3>Recent Orders</h3>
+              {orders.slice(0, 5).map((order) => (
+                <div key={order.id} className="order-item">
+                  <span>Order #{order.id}</span>
+                  <span className={`status-${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                  <span>${order.totalAmount}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
       case "categories":
         return (
           <div className="content-section">
@@ -615,7 +755,6 @@ const AdminDashboard: React.FC = () => {
                   >
                     ✏️
                   </button>
-
                   <button
                     onClick={() => handleDeleteCategory(cat.id)}
                     className="action-small-btn delete"
@@ -656,6 +795,27 @@ const AdminDashboard: React.FC = () => {
           </div>
         );
 
+      case "customers":
+        return (
+          <div className="content-section">
+            {renderSectionHeader("Manage Customers")}
+            {renderTable(
+              customers,
+              ["id", "name", "email", "phone", "defaultAddress", "createdAt"],
+              "customer",
+              (cust) => (
+                <button
+                  onClick={() => handleViewCustomerCart(cust.id)}
+                  className="action-small-btn"
+                  title="View Cart"
+                >
+                  🛒
+                </button>
+              )
+            )}
+          </div>
+        );
+
       case "orders":
         return (
           <div className="content-section">
@@ -691,7 +851,6 @@ const AdminDashboard: React.FC = () => {
             {renderTable(
               reports.map((report) => ({
                 ...report,
-                // Format dates for display
                 periodStart: new Date(report.periodStart).toLocaleDateString(),
                 periodEnd: new Date(report.periodEnd).toLocaleDateString(),
                 generatedAt: new Date(report.generatedAt).toLocaleDateString(),
@@ -713,9 +872,39 @@ const AdminDashboard: React.FC = () => {
                   >
                     👁️
                   </button>
-
                   <button
                     onClick={() => handleDeleteReport(report.id)}
+                    className="action-small-btn delete"
+                  >
+                    🗑️
+                  </button>
+                </>
+              )
+            )}
+          </div>
+        );
+
+      case "combos":
+        return (
+          <div className="content-section">
+            {renderSectionHeader("Manage Combos")}
+            {renderTable(
+              combos.map((combo) => ({
+                ...combo,
+                createdAt: new Date(combo.createdAt).toLocaleDateString(),
+              })),
+              ["id", "name", "totalPrice", "isSaved", "customer.name", "createdAt"],
+              "combo",
+              (combo) => (
+                <>
+                  <button
+                    onClick={() => handleViewCombo(combo.id)}
+                    className="action-small-btn"
+                  >
+                    👁️
+                  </button>
+                  <button
+                    onClick={() => handleDeleteCombo(combo.id)}
                     className="action-small-btn delete"
                   >
                     🗑️
@@ -733,14 +922,12 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className={`admin-container ${loading ? "loading" : ""}`}>
-      {/* Notification */}
       {notification && (
         <div className={`notification ${notification.type}`}>
           {notification.message}
         </div>
       )}
 
-      {/* Error Display */}
       {error && (
         <div className="error-banner">
           ⚠️ {error}
@@ -763,23 +950,28 @@ const AdminDashboard: React.FC = () => {
         <div className="stats-summary">
           <span className="stat">📦 Products: {products.length}</span>
           <span className="stat">📁 Categories: {categories.length}</span>
+          <span className="stat">👥 Customers: {customers.length}</span>
           <span className="stat">📋 Orders: {orders.length}</span>
           <span className="stat">📊 Reports: {reports.length}</span>
+          <span className="stat">🎁 Combos: {combos.length}</span>
         </div>
       </div>
 
       <div className="tab-nav">
-        {(["products", "categories", "orders", "reports"] as const).map(
+        {(["dashboard", "products", "categories", "customers", "orders", "reports", "combos"] as const).map(
           (tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`tab-btn ${activeTab === tab ? "active" : ""}`}
             >
+              {tab === "dashboard" && "📊 "}
               {tab === "products" && "📦 "}
               {tab === "categories" && "📁 "}
+              {tab === "customers" && "👥 "}
               {tab === "orders" && "📋 "}
-              {tab === "reports" && "📊 "}
+              {tab === "reports" && "📈 "}
+              {tab === "combos" && "🎁 "}
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           )
@@ -788,7 +980,6 @@ const AdminDashboard: React.FC = () => {
 
       {getTabContent()}
 
-      {/* Loading Overlay */}
       {loading && (
         <div className="loading-overlay">
           <div className="loading-spinner"></div>
