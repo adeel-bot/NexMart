@@ -1,18 +1,19 @@
 // app/api/cart/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import {prisma} from "../../../lib/prisma";
-import { withSession } from "../../../lib/session";
+import { prisma } from "../../../lib/prisma";
+import { getSession } from "../../../lib/session";
+import { cookies } from "next/headers";
 
-export const GET = withSession(async (req: any) => {
+export async function GET(req: NextRequest) {
   try {
-    const user = req.session.get("user");
+    const session = await getSession(await cookies());
     
-    if (!user) {
+    if (!session.isLoggedIn) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
     const cart = await prisma.cart.findUnique({
-      where: { customerId: user.id },
+      where: { customerId: session.id },
       include: {
         items: {
           include: {
@@ -50,4 +51,4 @@ export const GET = withSession(async (req: any) => {
     console.error("Error fetching cart:", error);
     return NextResponse.json({ error: "Failed to fetch cart" }, { status: 500 });
   }
-});
+}

@@ -1,14 +1,15 @@
 // app/api/cart/add/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import {prisma} from "../../../../lib/prisma";
-import { withSession } from "../../../../lib/session";
+import { prisma } from "../../../../lib/prisma";
+import { getSession } from "../../../../lib/session";
+import { cookies } from "next/headers";
 
 
-export const POST = withSession(async (req: any) => {
+export async function POST(req: NextRequest) {
   try {
-    const user = req.session.get("user");
+    const session = await getSession(await cookies());
     
-    if (!user) {
+    if (!session.isLoggedIn) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
@@ -20,12 +21,12 @@ export const POST = withSession(async (req: any) => {
 
     // Find or create cart for user
     let cart = await prisma.cart.findUnique({
-      where: { customerId: user.id },
+      where: { customerId: session.id },
     });
 
     if (!cart) {
       cart = await prisma.cart.create({
-        data: { customerId: user.id },
+        data: { customerId: session.id },
       });
     }
 
@@ -98,4 +99,4 @@ export const POST = withSession(async (req: any) => {
     console.error("Error adding to cart:", error);
     return NextResponse.json({ error: "Failed to add item to cart" }, { status: 500 });
   }
-});
+}
