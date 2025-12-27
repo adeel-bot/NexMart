@@ -1,0 +1,127 @@
+/* app/checkout/Checkout.css */
+
+.checkout-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .checkout-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .checkout-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  
+  .checkout-summary, .shipping-address {
+    margin-bottom: 2rem;
+  }
+  
+  .checkout-summary h2, .shipping-address h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .summary-item span {
+    font-size: 1rem;
+  }
+  
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #f0f0f0;
+  }
+  
+  .shipping-address textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    min-height: 100px;
+  }
+  
+  .place-order-button {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .place-order-button:hover {
+    background-color: #0056b3;
+  }
+
+  .cart-items-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item-details {
+    display: flex;
+    align-items: center;
+  }
+
+  .cart-item-details img {
+    width: 60px;
+    height: 60px;
+    margin-right: 1rem;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .cart-item-info h3 {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .cart-item-info p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.25rem 0 0;
+  }
+
+  .cart-item-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  

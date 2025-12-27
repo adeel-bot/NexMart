@@ -134,6 +134,7 @@ const AdminDashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [combos, setCombos] = useState<Combo[]>([]);
+  const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -440,14 +441,10 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  /** Order Operations */
   const handleUpdateOrderStatus = async (
     orderId: number,
-    currentStatus: string
+    newStatus: string
   ) => {
-    const newStatus = prompt("Enter new status:", currentStatus);
-    if (!newStatus || newStatus === currentStatus) return;
-
     try {
       const response = await fetch(`${API_BASE}/orders/${orderId}`, {
         method: "PATCH",
@@ -463,7 +460,7 @@ const AdminDashboard: React.FC = () => {
         const updatedOrder = await response.json();
         setOrders((prev) =>
           prev.map((order) =>
-            order.id === orderId ? { ...order, status: newStatus } : order
+            order.id === orderId ? updatedOrder : order
           )
         );
         showNotification("Order status updated successfully!", "success");
@@ -607,6 +604,51 @@ const AdminDashboard: React.FC = () => {
       }
     } catch {
       showNotification("Delete error", "error");
+    }
+  };
+
+  const handleCreateCombo = async () => {
+    const name = prompt("Enter combo name:");
+    if (!name) return;
+
+    const description = prompt("Enter description (optional):");
+    const customerId = prompt("Enter customer ID for this combo:", "1");
+    const itemsJson = prompt(
+      'Enter items as JSON array (e.g., [{"productId": 1, "quantity": 2, "unitPrice": 10.99}]):'
+    );
+
+    if (!itemsJson || !customerId) {
+      showNotification("Items JSON and customer ID are required.", "error");
+      return;
+    }
+
+    try {
+      const items = JSON.parse(itemsJson);
+      const response = await fetch(`${API_BASE}/combos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          customerId: parseInt(customerId),
+          items,
+          isSaved: true,
+        }),
+      });
+
+      if (response.ok) {
+        const newCombo = await response.json();
+        setCombos((prev) => [newCombo, ...prev]);
+        showNotification("Combo created successfully!", "success");
+      } else {
+        const errorData = await response.json();
+        showNotification(`Failed to create combo: ${errorData.error}`, "error");
+      }
+    } catch (error) {
+      console.error("Error creating combo:", error);
+      showNotification("Failed to create combo. Check console for errors.", "error");
     }
   };
 
@@ -817,27 +859,91 @@ const AdminDashboard: React.FC = () => {
         );
 
       case "orders":
-        return (
-          <div className="content-section">
-            {renderSectionHeader("Manage Orders")}
-            {renderTable(
-              orders,
-              ["id", "customer.name", "status", "totalAmount", "orderDate"],
-              "order",
-              (order) => (
-                <button
-                  onClick={() =>
-                    handleUpdateOrderStatus(order.id, order.status)
-                  }
-                  className="action-small-btn"
-                  title="Update Status"
-                >
-                  ✏️
-                </button>
-              )
-            )}
-          </div>
-        );
+  const StatusSelect = ({
+    order,
+    currentStatus,
+  }: {
+    order: Order;
+    currentStatus: string;
+  }) => (
+    <select
+      value={currentStatus}
+      onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value)}
+      className="status-select"
+    >
+      {["PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"].map(
+        (status) => (
+          <option key={status} value={status}>
+            {status}
+          </option>
+        )
+      )}
+    </select>
+  );
+
+  return (
+    <div className="content-section">
+      {renderSectionHeader("Manage Orders")}
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Total Amount</th>
+            <th>Order Date</th>
+            <th>Items</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <React.Fragment key={order.id}>
+              <tr>
+                <td>{order.id}</td>
+                <td>{order.customer?.name ?? "N/A"}</td>
+                <td>
+                  <StatusSelect order={order} currentStatus={order.status} />
+                </td>
+                <td>${order.totalAmount}</td>
+                <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+                <td>{order.items?.length ?? 0}</td>
+                <td>
+                  <button
+                    onClick={() =>
+                      setExpandedOrderId(
+                        expandedOrderId === order.id ? null : order.id
+                      )
+                    }
+                    className="action-small-btn"
+                  >
+                    {expandedOrderId === order.id ? "➖" : "👁️"}
+                  </button>
+                </td>
+              </tr>
+              {expandedOrderId === order.id && (
+                <tr className="order-details-row">
+                  <td colSpan={7}>
+                    <div className="order-details">
+                      <h4>Order Items</h4>
+                      <ul>
+                        {order.items?.map((item) => (
+                          <li key={item.id}>
+                            {item.quantity} x {item.product.name} (@ $
+                            {item.unitPrice})
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 
       case "reports":
         return (
@@ -887,7 +993,7 @@ const AdminDashboard: React.FC = () => {
       case "combos":
         return (
           <div className="content-section">
-            {renderSectionHeader("Manage Combos")}
+            {renderSectionHeader("Manage Combos", handleCreateCombo)}
             {renderTable(
               combos.map((combo) => ({
                 ...combo,

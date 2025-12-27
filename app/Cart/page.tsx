@@ -155,13 +155,15 @@ export default function CartPage() {
                   </div>
                 </div>
               </div>
+            
+            <div className='flex flex-col'>
 
-              <button
-                onClick={() => toast.success('Proceeding to checkout!')}
-                className="w-full mt-8 bg-[#1B5A7D] text-white py-3 rounded-lg font-medium hover:bg-[#003F62] transition-colors"
-              >
+              <Link
+                href="/checkout"
+                className="w-full p-3 text-center mt-8 bg-[#1B5A7D] text-white py-3 rounded-lg font-medium hover:bg-[#003F62] transition-colors"
+                >
                 Proceed to Checkout
-              </button>
+              </Link>
 
               <Link
                 href="/"
@@ -169,6 +171,7 @@ export default function CartPage() {
               >
                 <FiArrowLeft /> Continue Shopping
               </Link>
+      </div>
 
               <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-800">

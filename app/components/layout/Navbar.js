@@ -64,10 +64,10 @@ const Navbar = () => {
                     </div>
                 </>
             )}
-            <div className="nav-fav flex justify-center  gap-2 items-center">
+            {/* <div className="nav-fav flex justify-center  gap-2 items-center">
                 <Image src="/heart-plus.svg" height={22} width={22} alt="heart" />
                 <p className="font-light">Favourite</p>
-            </div>
+            </div> */}
             <div className="nav-cart flex justify-center gap-2 items-center">
                 <CartIcon/>
                 <p className="font-light">Cart</p>

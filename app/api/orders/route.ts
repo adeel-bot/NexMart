@@ -5,7 +5,14 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const orders = await prisma.order.findMany({
-      include: { items: true },
+      include: {
+        customer: true,
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
     });
     return NextResponse.json(orders);
   } catch {
