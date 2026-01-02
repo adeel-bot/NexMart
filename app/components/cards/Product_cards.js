@@ -68,6 +68,7 @@ const Product_cards = () => {
                         height={110}
                         src={product.imageUrl}
                         alt={product.name}
+                        unoptimized
                       />
                     </div>
                     <div className="flex flex-col gap-2">

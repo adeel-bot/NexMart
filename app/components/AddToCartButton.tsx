@@ -10,6 +10,16 @@ interface AddToCartButtonProps {
   className?: string;
   showIcon?: boolean;
   showText?: boolean;
+  comboDetails?: {
+    id: number;
+    name: string;
+    description?: string;
+    price: number; // The combo price
+    items: Array<{
+      productId: number;
+      product: any; // You might want to define a more specific type for product
+    }>;
+  };
 }
 
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
@@ -17,19 +27,20 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   className = '',
   showIcon = true,
   showText = true,
+  comboDetails,
 }) => {
   const { addToCart, items } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [added, setAdded] = useState(false);
 
-  const itemInCart = items.find(item => item.productId === productId);
+  const itemInCart = items.find(item => item.productId === productId && (!comboDetails || item.comboId === comboDetails.id));
 
   const handleAddToCart = async () => {
     if (isAdding) return;
     
     setIsAdding(true);
     try {
-      await addToCart(productId, 1);
+      await addToCart(productId, 1, comboDetails);
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
     } finally {

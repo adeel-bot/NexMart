@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
+import CreateComboForm from "./CreateComboForm";
+import "./CreateComboForm.css";
 
 export interface Admin {
   id: number;
@@ -102,25 +104,21 @@ export interface Report {
 }
 
 export interface Combo {
-  id: number;
-  customerId: number;
-  name: string;
-  description?: string | null;
-  totalPrice: string;
-  isSaved: boolean;
-  createdAt: string;
-  customer?: {
-    name: string;
-  };
-  items?: Array<{
     id: number;
-    productId: number;
-    quantity: number;
-    unitPrice: string;
-    product?: {
-      name: string;
-    };
-  }>;
+    name: string;
+    description?: string | null;
+    price: string;
+    isActive: boolean;
+    createdAt: string;
+    adminId: number;
+    items?: Array<{
+        id: number;
+        productId: number;
+        quantity: number;
+        product?: {
+            name: string;
+        };
+    }>;
 }
 
 const AdminDashboard: React.FC = () => {
@@ -134,7 +132,8 @@ const AdminDashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [combos, setCombos] = useState<Combo[]>([]);
-  const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+    const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+  const [isCreateComboFormVisible, setIsCreateComboFormVisible] = useState(false);
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -607,41 +606,25 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleCreateCombo = async () => {
-    const name = prompt("Enter combo name:");
-    if (!name) return;
+  const handleCreateCombo = () => {
+    setIsCreateComboFormVisible(true);
+  };
 
-    const description = prompt("Enter description (optional):");
-    const customerId = prompt("Enter customer ID for this combo:", "1");
-    const itemsJson = prompt(
-      'Enter items as JSON array (e.g., [{"productId": 1, "quantity": 2, "unitPrice": 10.99}]):'
-    );
-
-    if (!itemsJson || !customerId) {
-      showNotification("Items JSON and customer ID are required.", "error");
-      return;
-    }
-
+  const handleCreateComboSubmit = async (comboData: any) => {
     try {
-      const items = JSON.parse(itemsJson);
       const response = await fetch(`${API_BASE}/combos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          name,
-          description,
-          customerId: parseInt(customerId),
-          items,
-          isSaved: true,
-        }),
+        body: JSON.stringify(comboData),
       });
 
       if (response.ok) {
         const newCombo = await response.json();
         setCombos((prev) => [newCombo, ...prev]);
         showNotification("Combo created successfully!", "success");
+        setIsCreateComboFormVisible(false);
       } else {
         const errorData = await response.json();
         showNotification(`Failed to create combo: ${errorData.error}`, "error");
@@ -999,7 +982,7 @@ const AdminDashboard: React.FC = () => {
                 ...combo,
                 createdAt: new Date(combo.createdAt).toLocaleDateString(),
               })),
-              ["id", "name", "totalPrice", "isSaved", "customer.name", "createdAt"],
+              ["id", "name", "price", "isActive", "createdAt"],
               "combo",
               (combo) => (
                 <>
@@ -1085,6 +1068,15 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       {getTabContent()}
+
+      {isCreateComboFormVisible && (
+        <CreateComboForm
+          products={products}
+          onClose={() => setIsCreateComboFormVisible(false)}
+          onSubmit={handleCreateComboSubmit}
+          adminId={1} // Assuming adminId is 1 for now
+        />
+      )}
 
       {loading && (
         <div className="loading-overlay">

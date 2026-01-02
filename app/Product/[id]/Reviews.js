@@ -5,6 +5,14 @@ import Radio from "../../components/ui/Radio";
 export default function Reviews({ product }) {
   const [activeTab, setActiveTab] = useState("description");
 
+  if (!product) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-10 text-center text-gray-500">
+        Product not found
+      </div>
+    );
+  }
+
   // random reviews data
   const reviews = [
     {
@@ -30,7 +38,7 @@ export default function Reviews({ product }) {
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       {/* Tabs */}
-      <div className="flex justify-center items-center  gap-4 mb-6">
+      <div className="flex justify-center items-center gap-4 mb-6">
         <button
           className={`p-3 rounded-2xl border font-semibold transition-all will-change-transform duration-200 ${
             activeTab === "description"

@@ -3,14 +3,21 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const productId = parseInt(params.id, 10);
+    // Await params first
+    const { id } = await params;
+    
+    console.log("Received ID:", id);
+    
+    const productId = parseInt(id, 10);
+    
     if (isNaN(productId)) {
       return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
     }
 
+    // Your Prisma query here...
     const combos = await prisma.combo.findMany({
       where: {
         items: {
@@ -20,7 +27,6 @@ export async function GET(
         },
       },
       include: {
-        customer: true,
         items: {
           include: {
             product: true,
@@ -31,9 +37,9 @@ export async function GET(
 
     return NextResponse.json(combos);
   } catch (error) {
-    console.error(`Error fetching combos for product ${params.id}:`, error);
+    console.error("Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch combos for product" },
+      { error: "Failed to fetch combos" },
       { status: 500 }
     );
   }

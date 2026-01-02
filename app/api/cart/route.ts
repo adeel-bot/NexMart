@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
                 stock: true,
               },
             },
+            combo: true,
           },
         },
       },
@@ -35,9 +36,11 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ items: [], total: 0, subtotal: 0 }, { status: 200 });
     }
 
-    const subtotal = cart.items.reduce((sum, item) => {
-      return sum + (Number(item.product.price) * item.quantity);
-    }, 0);
+    let subtotal = 0;
+
+    for (const item of cart.items) {
+      subtotal += Number(item.effectiveUnitPrice) * item.quantity;
+    }
 
     const total = subtotal; // Add tax/shipping if needed
 

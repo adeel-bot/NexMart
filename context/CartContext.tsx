@@ -4,12 +4,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { toast } from 'react-hot-toast';
 
-interface Product {
+interface ComboDetails {
   id: number;
   name: string;
   price: number;
-  imageUrl: string | null;
-  stock: number;
 }
 
 interface CartItem {
@@ -17,6 +15,8 @@ interface CartItem {
   productId: number;
   quantity: number;
   product: Product;
+  comboId?: number; // New field to store combo ID if applicable
+  comboPrice?: number; // New field to store combo price if applicable
 }
 
 interface CartContextType {
@@ -25,7 +25,7 @@ interface CartContextType {
   subtotal: number;
   itemCount: number;
   isLoading: boolean;
-  addToCart: (productId: number, quantity?: number) => Promise<void>;
+  addToCart: (productId: number, quantity?: number, comboDetails?: ComboDetails) => Promise<void>;
   updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -75,12 +75,18 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     fetchCart();
   }, []);
 
-  const addToCart = async (productId: number, quantity: number = 1) => {
+  const addToCart = async (productId: number, quantity: number = 1, comboDetails?: ComboDetails) => {
     try {
+      const body: { productId: number; quantity: number; comboId?: number; comboPrice?: number } = { productId, quantity };
+      if (comboDetails) {
+        body.comboId = comboDetails.id;
+        body.comboPrice = comboDetails.price;
+      }
+
       const response = await fetch('/api/cart/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, quantity }),
+        body: JSON.stringify(body),
       });
 
       const data = await response.json();

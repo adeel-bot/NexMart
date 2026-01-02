@@ -16,6 +16,7 @@ model Admin {
   createdAt  DateTime   @default(now())
   categories Category[]
   products   Product[]
+  combos     Combo[]
   reports    Report[]
 }
 
@@ -28,7 +29,6 @@ model Customer {
   defaultAddress String?
   createdAt      DateTime @default(now())
   Cart           Cart?
-  combos         Combo[]
   orders         Order[]
 }
 
@@ -60,16 +60,19 @@ model Product {
 }
 
 model CartItem {
-  id        Int      @id @default(autoincrement())
-  cartId    Int
-  productId Int
-  quantity  Int      @default(1)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id])
+  id                 Int      @id @default(autoincrement())
+  cartId             Int
+  productId          Int
+  quantity           Int      @default(1)
+  effectiveUnitPrice Decimal  @db.Decimal(10, 2) // New field for the actual unit price
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @default(now()) @updatedAt
+  cart               Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product            Product  @relation(fields: [productId], references: [id])
+  comboId            Int?
+  combo              Combo?   @relation(fields: [comboId], references: [id])
 
-  @@unique([cartId, productId])
+  @@unique([cartId, productId, comboId]) // Modified unique constraint to allow same product in cart multiple times if it is part of a different combo
 }
 
 model Order {
@@ -108,25 +111,29 @@ model Payment {
 }
 
 model Combo {
-  id          Int         @id @default(autoincrement())
-  customerId  Int
+  id          Int      @id @default(autoincrement())
   name        String
   description String?
-  totalPrice  Decimal     @db.Decimal(10, 2)
-  isSaved     Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  customer    Customer    @relation(fields: [customerId], references: [id])
-  items       ComboItem[]
+  price       Decimal  @db.Decimal(10, 2)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  adminId Int
+  admin   Admin @relation(fields: [adminId], references: [id])
+
+  items     ComboItem[]
+  cartItems CartItem[]
 }
 
 model ComboItem {
-  id        Int     @id @default(autoincrement())
   comboId   Int
   productId Int
   quantity  Int
-  unitPrice Decimal @db.Decimal(10, 2)
-  combo     Combo   @relation(fields: [comboId], references: [id])
-  product   Product @relation(fields: [productId], references: [id])
+
+  combo   Combo   @relation(fields: [comboId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@id([comboId, productId])
 }
 
 model Report {

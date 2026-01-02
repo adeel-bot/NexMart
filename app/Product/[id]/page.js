@@ -4,6 +4,7 @@ import SubNavbar from "../../components/layout/SubNavbar";
 import Footer from "../../components/layout/Footer";
 import ProductDetails from "./ProductDetails"; // client
 import Reviews from "./Reviews";               // client
+import Combos from "./Combos";                 // client
 import { notFound } from 'next/navigation';    // Optional: for clean 404s
 
 export const dynamic = "force-dynamic";
@@ -60,6 +61,9 @@ export default async function ProductPage({ params }) {
       <Reviews 
        product={product}  
       />
+
+      {/* Combos Section */}
+      <Combos productId={id} />
 
       <Footer />
     </div>

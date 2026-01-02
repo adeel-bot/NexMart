@@ -102,25 +102,24 @@ CREATE TABLE "Payment" (
 -- CreateTable
 CREATE TABLE "Combo" (
     "id" SERIAL NOT NULL,
-    "customerId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
-    "totalPrice" DECIMAL(10,2) NOT NULL,
-    "isSaved" BOOLEAN NOT NULL DEFAULT false,
+    "price" DECIMAL(10,2) NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "adminId" INTEGER NOT NULL,
 
     CONSTRAINT "Combo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ComboItem" (
-    "id" SERIAL NOT NULL,
+    "id" INTEGER NOT NULL,
     "comboId" INTEGER NOT NULL,
     "productId" INTEGER NOT NULL,
     "quantity" INTEGER NOT NULL,
-    "unitPrice" DECIMAL(10,2) NOT NULL,
 
-    CONSTRAINT "ComboItem_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ComboItem_pkey" PRIMARY KEY ("comboId","productId")
 );
 
 -- CreateTable
@@ -189,7 +188,7 @@ ALTER TABLE "OrderItem" ADD CONSTRAINT "OrderItem_productId_fkey" FOREIGN KEY ("
 ALTER TABLE "Payment" ADD CONSTRAINT "Payment_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Combo" ADD CONSTRAINT "Combo_customerId_fkey" FOREIGN KEY ("customerId") REFERENCES "Customer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Combo" ADD CONSTRAINT "Combo_adminId_fkey" FOREIGN KEY ("adminId") REFERENCES "Admin"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ComboItem" ADD CONSTRAINT "ComboItem_comboId_fkey" FOREIGN KEY ("comboId") REFERENCES "Combo"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
