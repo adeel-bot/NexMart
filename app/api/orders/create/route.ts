@@ -23,16 +23,7 @@ export async function POST(req: NextRequest) {
     const cart = await prisma.cart.findUnique({
       where: { customerId: session.id },
       include: {
-        items: {
-          include: {
-            product: true,
-          },
-        },
-        Customer:{
-          include:{
-            orders:true,
-          }
-        }
+        items: true, // effectiveUnitPrice is included by default
       },
     });
 
@@ -40,11 +31,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Your cart is empty' }, { status: 400 });
     }
 
-    const subtotal = cart.items.reduce((sum, item) => {
-        return sum + Number(item.product.price) * item.quantity;
-    }, 0);
-      
-    const totalAmount = new Decimal(subtotal); // In a real app, you might add taxes, shipping, etc.
+    const totalAmount = cart.items.reduce((sum, item) => {
+        return sum.add(new Decimal(item.effectiveUnitPrice).mul(item.quantity));
+    }, new Decimal(0));
 
     const order = await prisma.$transaction(async (tx) => {
         // 1. Create the Order
@@ -59,8 +48,8 @@ export async function POST(req: NextRequest) {
                 create: cart.items.map((item) => ({
                     productId: item.productId,
                     quantity: item.quantity,
-                    unitPrice: item.product.price,
-                    lineTotal: new Decimal(Number(item.product.price) * item.quantity),
+                    unitPrice: item.effectiveUnitPrice,
+                    lineTotal: new Decimal(item.effectiveUnitPrice).mul(item.quantity),
                 })),
               },
             },
@@ -76,13 +65,16 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        await tx.cart.delete({
-            where: {
-                id: cart.id,
-            }
-        });
+        // Note: You might not want to delete the cart itself, just its items.
+        // If you want to keep the cart for the user's next session:
+        // zostawiam to bo nie wiem czy usuniecie koszyka jest dobrym pomyslem
+        // await tx.cart.delete({ 
+        //     where: {
+        //         id: cart.id,
+        //     }
+        // });
 
-        // 3. (Optional) Decrement product stock
+        // 3. Decrement product stock
         for (const item of cart.items) {
             await tx.product.update({
                 where: { id: item.productId },

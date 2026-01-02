@@ -1,10 +1,18 @@
-// context/CartContext.tsx
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 
-interface ComboDetails {
+// Interfaces based on Prisma schema and API responses
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl?: string;
+  stock: number;
+}
+
+interface Combo {
   id: number;
   name: string;
   price: number;
@@ -14,9 +22,16 @@ interface CartItem {
   id: number;
   productId: number;
   quantity: number;
+  effectiveUnitPrice: number;
   product: Product;
-  comboId?: number; // New field to store combo ID if applicable
-  comboPrice?: number; // New field to store combo price if applicable
+  comboId?: number;
+  combo?: Combo;
+}
+
+interface AddToCartParams {
+  productId?: number;
+  comboId?: number;
+  quantity?: number;
 }
 
 interface CartContextType {
@@ -25,7 +40,7 @@ interface CartContextType {
   subtotal: number;
   itemCount: number;
   isLoading: boolean;
-  addToCart: (productId: number, quantity?: number, comboDetails?: ComboDetails) => Promise<void>;
+  addToCart: (params: AddToCartParams) => Promise<void>;
   updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -54,7 +69,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch('/api/cart');
@@ -66,23 +81,25 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       }
     } catch (error) {
       console.error('Error fetching cart:', error);
+      toast.error("Could not fetch cart.");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCart();
-  }, []);
+  }, [fetchCart]);
 
-  const addToCart = async (productId: number, quantity: number = 1, comboDetails?: ComboDetails) => {
+  const addToCart = async ({ productId, comboId, quantity = 1 }: AddToCartParams) => {
+    if (!productId && !comboId) {
+      toast.error("Product or combo ID must be provided.");
+      return;
+    }
+
     try {
-      const body: { productId: number; quantity: number; comboId?: number; comboPrice?: number } = { productId, quantity };
-      if (comboDetails) {
-        body.comboId = comboDetails.id;
-        body.comboPrice = comboDetails.price;
-      }
-
+      const body = comboId ? { comboId, quantity } : { productId, quantity };
+      
       const response = await fetch('/api/cart/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -92,8 +109,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Added to cart!');
-        await fetchCart(); // Refresh cart data
+        toast.success(data.message || 'Added to cart!');
+        await fetchCart();
       } else {
         toast.error(data.error || 'Failed to add to cart');
       }
@@ -104,9 +121,13 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const updateQuantity = async (itemId: number, quantity: number) => {
+    if (quantity < 1) {
+      await removeItem(itemId);
+      return;
+    }
     try {
       const response = await fetch('/api/cart/update', {
-        method: 'PUT',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ itemId, quantity }),
       });
@@ -128,7 +149,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const removeItem = async (itemId: number) => {
     try {
       const response = await fetch('/api/cart/remove', {
-        method: 'DELETE',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ itemId }),
       });
@@ -149,11 +170,16 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      // Remove all items one by one or create a clear endpoint
-      for (const item of items) {
-        await removeItem(item.id);
+      const response = await fetch('/api/cart/clear', {
+        method: 'POST',
+      });
+       if (response.ok) {
+        toast.success('Cart cleared');
+        await fetchCart();
+      } else {
+        const data = await response.json();
+        toast.error(data.error || 'Failed to clear cart');
       }
-      toast.success('Cart cleared');
     } catch (error) {
       console.error('Error clearing cart:', error);
       toast.error('Failed to clear cart');

@@ -36,11 +36,16 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   const itemInCart = items.find(item => item.productId === productId && (!comboDetails || item.comboId === comboDetails.id));
 
   const handleAddToCart = async () => {
-    if (isAdding) return;
+    // Guard clause to prevent action if IDs are missing
+    if (isAdding || (!productId && !comboDetails)) return;
     
     setIsAdding(true);
     try {
-      await addToCart(productId, 1, comboDetails);
+      if (comboDetails) {
+        await addToCart({ comboId: comboDetails.id });
+      } else {
+        await addToCart({ productId: productId });
+      }
       setAdded(true);
       setTimeout(() => setAdded(false), 2000);
     } finally {
@@ -51,7 +56,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   return (
     <button
       onClick={handleAddToCart}
-      disabled={isAdding}
+      disabled={isAdding || (!productId && !comboDetails)}
       className={`flex items-center justify-center gap-2 bg-[#EDA415] hover:bg-[#ffb432] text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
     >
       {isAdding ? (

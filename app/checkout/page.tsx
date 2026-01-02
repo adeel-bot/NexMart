@@ -81,7 +81,7 @@ const CheckoutPage = () => {
                 </div>
               </div>
               <div className="cart-item-price">
-                ${(item.product.price * item.quantity).toFixed(2)}
+                ${(item.effectiveUnitPrice * item.quantity).toFixed(2)}
               </div>
             </li>
           ))}

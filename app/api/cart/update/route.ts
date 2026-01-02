@@ -4,7 +4,7 @@ import { prisma } from "../../../../lib/prisma";
 import { getSession } from "../../../../lib/session";
 import { cookies } from "next/headers";
 
-export async function PUT (req: NextRequest) {
+export async function POST (req: NextRequest) {
   try {
      const session = await getSession(await cookies());
         

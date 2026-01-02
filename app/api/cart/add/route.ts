@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Not authenticated as a customer" }, { status: 401 });
     }
 
-    const { productId, comboId, comboPrice: rawComboPrice, quantity = 1 } = await req.json();
+    const { productId, comboId, quantity = 1 } = await req.json();
 
     if (!productId && !comboId) {
       return NextResponse.json({ error: "Product ID or Combo ID is required" }, { status: 400 });
@@ -72,40 +72,37 @@ export async function POST(req: NextRequest) {
       // Handle combo
       const combo = await prisma.combo.findUnique({
         where: { id: comboId },
-        include: { items: true },
+        include: { 
+          items: {
+            include: {
+              product: true
+            }
+          } 
+        },
       });
 
       if (!combo) {
         return NextResponse.json({ error: "Combo not found" }, { status: 404 });
       }
+      
+      const totalRegularPrice = combo.items.reduce((sum, item) => {
+        return sum.add(new Prisma.Decimal(item.product.price).mul(item.quantity));
+      }, new Prisma.Decimal(0));
 
-      if (!rawComboPrice) {
-        return NextResponse.json({ error: "Combo price is required when adding a combo" }, { status: 400 });
-      }
-
-      const comboPrice = new Prisma.Decimal(rawComboPrice);
-
-      // Calculate total number of *product units* in the combo
-      const totalComboItemsCount = combo.items.reduce((sum, item) => sum + item.quantity, 0);
-
-      if (totalComboItemsCount === 0) {
-        return NextResponse.json({ error: "Combo has no items" }, { status: 400 });
-      }
-
-      // Calculate prorated unit price for each item based on the combo's total price
-      const proratedUnitPricePerBaseItem = comboPrice.dividedBy(totalComboItemsCount);
+      const discountRatio = totalRegularPrice.isZero()
+        ? new Prisma.Decimal(1)
+        : new Prisma.Decimal(combo.price).dividedBy(totalRegularPrice);
 
       for (const comboItem of combo.items) {
         const existingItem = await prisma.cartItem.findFirst({
           where: {
             cartId: cart.id,
             productId: comboItem.productId,
-            comboId: combo.id, // Ensure we are looking for this specific combo's product
+            comboId: combo.id,
           },
         });
-
-        // The effective unit price for this product in the cart, considering its quantity within the combo
-        const effectiveUnitPrice = proratedUnitPricePerBaseItem.mul(comboItem.quantity);
+        
+        const effectiveUnitPrice = new Prisma.Decimal(comboItem.product.price).mul(discountRatio);
 
         if (existingItem) {
           await prisma.cartItem.update({

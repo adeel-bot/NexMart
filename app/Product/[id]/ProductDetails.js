@@ -28,14 +28,6 @@ export default function ProductDetails({ product }) {
     }
   }, [product.id]);
 
-  // Function to add all items in a combo to the cart
-  const addComboToCart = (combo) => {
-    combo.items.forEach((item) => {
-      // Assuming each item has quantity (default to 1) and product object
-      addToCart(item.product.id, item.quantity || 1);
-    });
-  };
-
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-8">
@@ -96,7 +88,7 @@ export default function ProductDetails({ product }) {
           <p className="text-gray-600">Stock: {product.stock}</p>
 
           <button
-            onClick={() => addToCart(product.id)}
+            onClick={() => addToCart({ productId: product.id })}
             className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-xl transition"
           >
             Add to Cart
@@ -140,7 +132,7 @@ export default function ProductDetails({ product }) {
 
                   {/* Add Combo Button */}
                   <button
-                    onClick={() => addComboToCart(combo)}
+                    onClick={() => addToCart({ comboId: combo.id })}
                     className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition shadow-md"
                   >
                     Add Combo to Cart
