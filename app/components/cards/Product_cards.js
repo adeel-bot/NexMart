@@ -81,7 +81,7 @@ const Product_cards = () => {
                       <div>
                         <Radio rating={4.5} />
                       </div>
-                      <button onClick={() => addToCart(product.id)}>
+                      <button  onClick={() => addToCart({ productId: product.id })}>
                         Add to Cart
                       </button>
                     </div>
